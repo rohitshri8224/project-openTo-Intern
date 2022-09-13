@@ -13,8 +13,9 @@ const createCollege = async function (req, res) {
 		if (Object.keys(req.body).length === 0)
 			return res.status(400).send({ status: false, msg: "Required data" });
 
-		// Checking if the required fields are present or not
 		const requiredFields = ["name", "fullName", "logoLink"];
+
+		// Checking if the required fields are present or not
 		for (field of requiredFields) {
 			if (!req["body"].hasOwnProperty(field))
 				return res
@@ -23,29 +24,23 @@ const createCollege = async function (req, res) {
 		}
 
 		// Checking if the value is a valid string or not
-		// for (key in req.body) {
-		// 	if (!isValidString(req.body[key]))
-		//   console.log(`${key} is ${isValidString(key)}`)
-		// 		return res
-		// 			.status(400)
-		// 			.send({ status: false, msg: `Please provide a valid ${key}` });
-		// }
+		for (field of requiredFields) {
+			if (!isValidString(req.body[field]))
+				return res
+					.status(400)
+					.send({ status: false, msg: `Please provide a valid ${field}` });
+		}
 
-		if (!isValidString(req.body.name))
-			return res
-				.status(400)
-				.send({ status: false, msg: `Please provide a valid name` });
+		//Checking if there is no field other than the specified
+		for (key in req.body) {
+			if (!requiredFields.includes(key))
+				return res.status(400).send({
+					status: false,
+					msg: `Fields can only be among these: ${requiredFields.join(", ")}`,
+				});
+		}
 
-		if (!isValidString(req.body.fullName))
-			return res
-				.status(400)
-				.send({ status: false, msg: `Please provide a valid fullName` });
-
-		if (!isValidString(req.body.logoLink))
-			return res
-				.status(400)
-				.send({ status: false, msg: `Please provide a valid logoLink` });
-
+		// Storing req.body in requestBody variable
 		const requestBody = req.body;
 
 		// Checking if the college name already exists or not
