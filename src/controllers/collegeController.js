@@ -25,11 +25,26 @@ const createCollege = async function (req, res) {
 		// Checking if the value is a valid string or not
 		// for (key in req.body) {
 		// 	if (!isValidString(req.body[key]))
-    //   console.log(`${key} is ${isValidString(key)}`)
+		//   console.log(`${key} is ${isValidString(key)}`)
 		// 		return res
 		// 			.status(400)
 		// 			.send({ status: false, msg: `Please provide a valid ${key}` });
 		// }
+
+		if (!isValidString(req.body.name))
+			return res
+				.status(400)
+				.send({ status: false, msg: `Please provide a valid name` });
+
+		if (!isValidString(req.body.fullName))
+			return res
+				.status(400)
+				.send({ status: false, msg: `Please provide a valid fullName` });
+
+		if (!isValidString(req.body.logoLink))
+			return res
+				.status(400)
+				.send({ status: false, msg: `Please provide a valid logoLink` });
 
 		const requestBody = req.body;
 
