@@ -7,6 +7,12 @@ const isValidString = function (data) {
   return true;
 };
 
+const isValidUrl = function (data) {
+  const urlRegex =
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/;
+  return urlRegex.test(data);
+};
+
 const createCollege = async function (req, res) {
   try {
     // Checking if the request body is empty or not
@@ -38,6 +44,12 @@ const createCollege = async function (req, res) {
           status: false,
           msg: `Fields can only be among these: ${requiredFields.join(", ")}`,
         });
+    }
+    // Checking if the logoLink is a valid or not
+    if (!isValidUrl(req.body.logoLink.trim())) {
+      return res
+        .status(400)
+        .send({ status: false, msg: "logoLink is invalid" });
     }
 
     // Storing req.body in requestBody variable

@@ -31,7 +31,7 @@ const createIntern = async function (req, res) {
       if (!data.hasOwnProperty(field)) {
         return res
           .status(400)
-          .send({ status: false, msg: `please provide this ${field}` });
+          .send({ status: false, msg: `please provide ${field}` });
       }
     }
     //Checking if there is no field other than the specified
@@ -47,11 +47,13 @@ const createIntern = async function (req, res) {
       if (!isValidString(data[field])) {
         return res
           .status(400)
-          .send({ status: false, msg: `${field} is required` });
+          .send({ status: false, msg: `${field} is invalid` });
       }
+    // Checking if the Email is a valid or not
     if (!isValidEmail(data.email.trim())) {
       return res.status(400).send({ status: false, msg: "email is invalid" });
     }
+    // Checking if the Mobile is a valid or not
     if (!isMobileNumber(data.mobile.trim())) {
       return res
         .status(400)
@@ -62,7 +64,6 @@ const createIntern = async function (req, res) {
     for (field of unique) {
       let emp = {};
       emp[field] = data[field];
-      console.log(emp);
       let document = await internModel.findOne(emp);
       if (document) {
         return res
@@ -71,9 +72,11 @@ const createIntern = async function (req, res) {
       }
     }
 
-    let collegeData = await collegeModel.findOne({ name: data.collegeName.trim() });
-    if(!collegeData){
-        return res.status(404).send({status:false,msg:"no document found"})
+    let collegeData = await collegeModel.findOne({
+      name: data.collegeName.trim(),
+    });
+    if (!collegeData) {
+      return res.status(404).send({ status: false, msg: "no document found" });
     }
     data.collegeId = collegeData._id;
     delete data["collegeName"];
@@ -109,7 +112,9 @@ async function getInterns(req, res) {
     }
   }
   // Checking if the college name exists or not
-  let findDocument = await collegeModel.findOne({ name: data.collegeName.trim()});
+  let findDocument = await collegeModel.findOne({
+    name: data.collegeName.trim(),
+  });
   if (!findDocument) {
     return res.status(404).send({ status: false, msg: "resource not found" });
   }
