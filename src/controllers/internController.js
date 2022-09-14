@@ -87,45 +87,6 @@ const createIntern = async function (req, res) {
   }
 };
 
-async function getInterns(req, res) {
-  let data = req.query;
-  // Checking if the data is empty or not
-  if (Object.keys(data).length === 0) {
-    return res.status(400).send({ status: false, msg: "requied filters" });
-  }
-  //Checking if the required keys are present or not
-  if (!data.hasOwnProperty("collegeName")) {
-    return res.status(400).send({ status: false, msg: "requied collegeName" });
-  }
-  //Checking if the value of key is present or not
-  if (!data.collegeName.trim()) {
-    return res
-      .status(400)
-      .send({ status: false, msg: "please provide collegeName" });
-  }
-  //Checking if there is no filters other than the specified
-  for (key in data) {
-    if (!["collegeName"].includes(key)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "use only filter collegeName" });
-    }
-  }
-  // Checking if the college name exists or not
-  let findDocument = await collegeModel.findOne({
-    name: data.collegeName.trim(),
-  });
-  if (!findDocument) {
-    return res.status(404).send({ status: false, msg: "resource not found" });
-  }
-  let Id = findDocument._id;
-  let getInterns = await internModel.find({ collegeId: Id });
-  const obj = {};
-  obj.name = findDocument.name;
-  obj.fullName = findDocument.fullName;
-  obj.logoLink = findDocument.logoLink;
-  obj.interns = [...getInterns];
-  return res.status(200).send({ status: true, data: obj });
-}
 
-module.exports = { createIntern, getInterns };
+
+module.exports = { createIntern };
