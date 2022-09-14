@@ -71,7 +71,10 @@ const createIntern = async function (req, res) {
       }
     }
 
-    let collegeData = await collegeModel.findOne({ name: data.collegeName });
+    let collegeData = await collegeModel.findOne({ name: data.collegeName.trim() });
+    if(!collegeData){
+        return res.status(404).send({status:false,msg:"no document found"})
+    }
     data.collegeId = collegeData._id;
     delete data["collegeName"];
     let createInterns = await internModel.create(data);
@@ -106,7 +109,7 @@ async function getInterns(req, res) {
     }
   }
   // Checking if the college name exists or not
-  let findDocument = await collegeModel.findOne({ name: data.collegeName });
+  let findDocument = await collegeModel.findOne({ name: data.collegeName.trim()});
   if (!findDocument) {
     return res.status(404).send({ status: false, msg: "resource not found" });
   }
