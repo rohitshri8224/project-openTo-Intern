@@ -57,7 +57,9 @@ const createCollege = async function (req, res) {
     const requestBody = req.body;
 
     // Checking if the college name already exists or not
-    const checkName = await collegeModel.findOne({ name: requestBody.name.trim() });
+    const checkName = await collegeModel.findOne({
+      name: requestBody.name.trim(),
+    });
     if (checkName)
       return res
         .status(400)
@@ -72,50 +74,50 @@ const createCollege = async function (req, res) {
 };
 
 async function getInterns(req, res) {
-  try{let data = req.query;
-  // Checking if the data is empty or not
-  if (Object.keys(data).length === 0) {
-    return res.status(400).send({ status: false, msg: "requied filters" });
-  }
-  //Checking if the required keys are present or not
-  if (!data.hasOwnProperty("collegeName")) {
-    return res.status(400).send({ status: false, msg: "requied collegeName" });
-  }
-  //Checking if the value of key is present or not
-  if (!data.collegeName.trim()) {
-    return res
-      .status(400)
-      .send({ status: false, msg: "please provide collegeName" });
-  }
-  //Checking if there is no filters other than the specified
-  for (key in data) {
-    if (!["collegeName"].includes(key)) {
+  try {
+    let data = req.query;
+    // Checking if the data is empty or not
+    if (Object.keys(data).length === 0) {
+      return res.status(400).send({ status: false, msg: "requied filters" });
+    }
+    //Checking if the required keys are present or not
+    if (!data.hasOwnProperty("collegeName")) {
       return res
         .status(400)
-        .send({ status: false, msg: "use only filter collegeName" });
+        .send({ status: false, msg: "requied collegeName" });
     }
-  }
-  // Checking if the college name exists or not
-  let findDocument = await collegeModel.findOne({
-    name: data.collegeName.trim()
-  });
-  if (!findDocument) {
-    return res.status(404).send({ status: false, msg: "resource not found" });
-  }
-  let Id = findDocument._id;
-  let getInterns = await internModel.find({ collegeId: Id });
-  if(getInterns.length===0){
-    return res
-        .status(404)
-        .send({ status: false, msg: "interns not found" });
-  }
-  const obj = {};
-  obj.name = findDocument.name;
-  obj.fullName = findDocument.fullName;
-  obj.logoLink = findDocument.logoLink;
-  obj.interns = [...getInterns];
-  return res.status(200).send({ status: true, data: obj });}
-  catch(err){
+    //Checking if the value of key is present or not
+    if (!data.collegeName.trim()) {
+      return res
+        .status(400)
+        .send({ status: false, msg: "please provide collegeName" });
+    }
+    //Checking if there is no filters other than the specified
+    for (key in data) {
+      if (!["collegeName"].includes(key)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "use only filter collegeName" });
+      }
+    }
+    // Checking if the college name exists or not
+    let findDocument = await collegeModel
+      .findOne({
+        name: data.collegeName.trim(),
+      })
+      .select({ _id: 0, name: 1, fullName: 1, logoLink: 1 })
+      .lean();
+    if (!findDocument) {
+      return res.status(404).send({ status: false, msg: "resource not found" });
+    }
+    let Id = findDocument._id;
+    let getInterns = await internModel.find({ collegeId: Id });
+    if (getInterns.length === 0) {
+      return res.status(404).send({ status: false, msg: "interns not found" });
+    }
+    findDocument.interns = [...getInterns];
+    return res.status(200).send({ status: true, data: findDocument });
+  } catch (err) {
     res.status(500).send({ status: false, msg: err.message });
   }
 }
