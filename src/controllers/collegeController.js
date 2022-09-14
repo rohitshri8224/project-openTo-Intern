@@ -9,7 +9,7 @@ const isValidString = function (data) {
 
 const createCollege = async function (req, res) {
   try {
-    // Checking if the request body is not empty
+    // Checking if the request body is empty or not
     if (Object.keys(req.body).length === 0)
       return res.status(400).send({ status: false, msg: "Required data" });
 
