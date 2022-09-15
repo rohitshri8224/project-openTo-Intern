@@ -104,6 +104,7 @@ async function getInterns(req, res) {
     let findDocument = await collegeModel
       .findOne({
         name: data.collegeName.trim(),
+        isDeleted: false,
       })
       .select({ name: 1, fullName: 1, logoLink: 1 })
       .lean();
@@ -111,13 +112,16 @@ async function getInterns(req, res) {
       return res.status(404).send({ status: false, msg: "resource not found" });
     }
     let Id = findDocument._id;
-    let getInterns = await internModel.find({ collegeId: Id });
+    let getInterns = await internModel.find({
+      collegeId: Id,
+      isDeleted: false,
+    });
     if (getInterns.length === 0) {
-      delete findDocument["_id"]
-    findDocument.interns = ["interns not found"];
-    return res.status(200).send({ status: true, data: findDocument })
+      delete findDocument["_id"];
+      findDocument.interns = "interns not found";
+      return res.status(200).send({ status: true, data: findDocument });
     }
-    delete findDocument["_id"]
+    delete findDocument["_id"];
     findDocument.interns = [...getInterns];
     return res.status(200).send({ status: true, data: findDocument });
   } catch (err) {
