@@ -16,6 +16,12 @@ const isValidString = function (data) {
   return true;
 };
 
+const checkNumbersInString= function(data){
+  const checkNumbersInStringRegex =
+    /^[a-zA-Z]*$ /;
+  return checkNumbersInStringRegex.test(data);
+}
+
 const createIntern = async function (req, res) {
   try {
     let data = req.body;
@@ -25,6 +31,12 @@ const createIntern = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "required data in the body" });
     }
+    if (!checkNumbersInString(data.name)) {
+      return res
+        .status(400)
+        .send({ status: false, msg: "name should only contain letters" });
+    }
+
     //Checking if the required keys are present or not
     const requiredFields = ["name", "email", "mobile", "collegeName"];
     for (field of requiredFields) {
