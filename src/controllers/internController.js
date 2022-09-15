@@ -18,7 +18,7 @@ const isValidString = function (data) {
 
 const checkNumbersInString= function(data){
   const checkNumbersInStringRegex =
-    /^[a-zA-Z]*$/;
+    /^[a-zA-Z ]*$/;
   return checkNumbersInStringRegex.test(data);
 }
 
@@ -88,7 +88,7 @@ const createIntern = async function (req, res) {
       name: data.collegeName.trim(),
     });
     if (!collegeData) {
-      return res.status(404).send({ status: false, msg: "no document found" });
+      return res.status(404).send({ status: false, msg: "no such clg with the give collegeName" });
     }
     data.collegeId = collegeData._id;
     delete data["collegeName"];

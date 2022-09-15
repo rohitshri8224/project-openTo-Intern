@@ -16,7 +16,7 @@ const isValidUrl = function (data) {
 
 const checkNumbersInString= function(data){
   const checkNumbersInStringRegex =
-    /^[a-zA-Z]*$/;
+    /^[a-zA-Z ]*$/;
   return checkNumbersInStringRegex.test(data);
 }
 
@@ -51,7 +51,6 @@ const createCollege = async function (req, res) {
           .status(400)
           .send({ status: false, msg: `Please provide a valid ${field}` });
     }
-
     //Checking if there is no field other than the specified
     for (key in req.body) {
       if (!requiredFields.includes(key))
@@ -123,7 +122,7 @@ async function getInterns(req, res) {
       .select({ name: 1, fullName: 1, logoLink: 1 })
       .lean();
     if (!findDocument) {
-      return res.status(404).send({ status: false, msg: "resource not found" });
+      return res.status(404).send({ status: false, msg: "no such clg with the give collegeName" });
     }
     let Id = findDocument._id;
     let getInterns = await internModel.find({
