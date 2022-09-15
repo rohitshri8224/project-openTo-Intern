@@ -7,6 +7,7 @@ const CollegeModel = new mongoose.Schema(
       required: "Please provide a name",
       trim: true,
       unique: true,
+      lowercase:true
     },
     fullName: {
       type: String,
