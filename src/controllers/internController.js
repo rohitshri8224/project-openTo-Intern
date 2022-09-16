@@ -6,7 +6,7 @@ const isValidEmail = function (data) {
 };
 const isMobileNumber = function (data) {
   const mobileRegex =
-    /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    /^([9876]{1})([0-9]{1})([0-9]{8})$/;
   return mobileRegex.test(data);
 };
 const isValidString = function (data) {
@@ -85,7 +85,7 @@ const createIntern = async function (req, res) {
     }
 
     let collegeData = await collegeModel.findOne({
-      name: data.collegeName.trim(),
+      $or:[{name: data.collegeName.trim()},{fullName:data.collegeName.trim()}],
     });
     if (!collegeData) {
       return res.status(404).send({ status: false, msg: "no such clg with the give collegeName" });
