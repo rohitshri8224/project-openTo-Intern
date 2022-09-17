@@ -85,7 +85,7 @@ const createIntern = async function (req, res) {
     }
 
     let collegeData = await collegeModel.findOne({
-      $or:[{name: data.collegeName.trim()},{fullName:data.collegeName.trim()}],
+      name: data.collegeName.trim()
     });
     if (!collegeData) {
       return res.status(404).send({ status: false, msg: "no such clg with the give collegeName" });
