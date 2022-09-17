@@ -40,6 +40,13 @@ const createIntern = async function (req, res) {
           .send({ status: false, msg: `please provide ${field}` });
       }
     }
+    // Checking if the value is a valid string or not
+    for (field of requiredFields)
+      if (!isValidString(data[field])) {
+        return res
+          .status(400)
+          .send({ status: false, msg: `${field} is invalid` });
+      }
     //Checking if the name contains numbers or not
     if (!checkNumbersInString(data.name)) {
       return res
@@ -54,13 +61,6 @@ const createIntern = async function (req, res) {
           msg: `keys must be among this ${requiredFields.join(",")}`,
         });
     }
-    // Checking if the value is a valid string or not
-    for (field of requiredFields)
-      if (!isValidString(data[field])) {
-        return res
-          .status(400)
-          .send({ status: false, msg: `${field} is invalid` });
-      }
     // Checking if the Email is a valid or not
     if (!isValidEmail(data.email.trim())) {
       return res.status(400).send({ status: false, msg: "email is invalid" });

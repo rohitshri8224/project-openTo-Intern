@@ -35,6 +35,13 @@ const createCollege = async function (req, res) {
           .status(400)
           .send({ status: false, msg: `Please provide ${field}` });
     }
+    // Checking if the value is a valid string or not
+    for (field of requiredFields) {
+      if (!isValidString(req.body[field]))
+        return res
+          .status(400)
+          .send({ status: false, msg: `${field} is invalid` });
+    }
     //Checking if the name contains numbers or not
     const onlyLetters = ["name", "fullName"];
     for (field of onlyLetters) {
@@ -43,13 +50,6 @@ const createCollege = async function (req, res) {
           .status(400)
           .send({ status: false, msg: `${field} should only contain letters` });
       }
-    }
-    // Checking if the value is a valid string or not
-    for (field of requiredFields) {
-      if (!isValidString(req.body[field]))
-        return res
-          .status(400)
-          .send({ status: false, msg: `Please provide a valid ${field}` });
     }
     //Checking if there is no field other than the specified
     for (key in req.body) {
