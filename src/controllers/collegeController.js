@@ -20,6 +20,7 @@ const checkNumbersInString= function(data){
   return checkNumbersInStringRegex.test(data);
 }
 
+
 const createCollege = async function (req, res) {
   try {
     // Checking if the request body is empty or not
