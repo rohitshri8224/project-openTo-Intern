@@ -10,7 +10,7 @@ const isValidString = function (data) {
 
 const isValidUrl = function (data) {
   const urlRegex =
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/;
+    /(https?:\/\/(?:www\.)?[\w+-_.0-9@\/]+logo.(?:png|jpg|jpeg))/i;
   return urlRegex.test(data);
 };
 
