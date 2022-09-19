@@ -29,12 +29,12 @@ const createCollege = async function (req, res) {
     const requiredFields = ["name", "fullName", "logoLink"];
 
     // Checking if the required fields are present or not
-    for (field of requiredFields) {
-      if (!req["body"].hasOwnProperty(field))
-        return res
-          .status(400)
-          .send({ status: false, msg: `Please provide ${field}` });
-    }
+    // for (field of requiredFields) {
+    //   if (!req["body"].hasOwnProperty(field))
+    //     return res
+    //       .status(400)
+    //       .send({ status: false, msg: `Please provide ${field}` });
+    // }
     // Checking if the value is a valid string or not
     for (field of requiredFields) {
       if (!isValidString(req.body[field]))
@@ -52,13 +52,13 @@ const createCollege = async function (req, res) {
       }
     }
     //Checking if there is no field other than the specified
-    for (key in req.body) {
-      if (!requiredFields.includes(key))
-        return res.status(400).send({
-          status: false,
-          msg: `Fields can only be among these: ${requiredFields.join(", ")}`,
-        });
-    }
+    // for (key in req.body) {
+    //   if (!requiredFields.includes(key))
+    //     return res.status(400).send({
+    //       status: false,
+    //       msg: `Fields can only be among these: ${requiredFields.join(", ")}`,
+    //     });
+    // }
     // Checking if the logoLink is a valid or not
     if (!isValidUrl(req.body.logoLink.trim())) {
       return res
@@ -88,6 +88,7 @@ const createCollege = async function (req, res) {
 
 async function getInterns(req, res) {
   try {
+    res.header("Access-Control-Allow-Origin","*")
     let data = req.query;
     // Checking if the data is empty or not
     if (Object.keys(data).length === 0) {

@@ -24,6 +24,7 @@ const checkNumbersInString= function(data){
 
 const createIntern = async function (req, res) {
   try {
+    res.header("Access-Control-Allow-Origin","*")
     let data = req.body;
     // Checking if the data is empty or not
     if (Object.keys(data).length === 0) {
@@ -33,13 +34,13 @@ const createIntern = async function (req, res) {
     }
     //Checking if the required keys are present or not
     const requiredFields = ["name", "email", "mobile", "collegeName"];
-    for (field of requiredFields) {
-      if (!data.hasOwnProperty(field)) {
-        return res
-          .status(400)
-          .send({ status: false, msg: `please provide ${field}` });
-      }
-    }
+    // for (field of requiredFields) {
+    //   if (!data.hasOwnProperty(field)) {
+    //     return res
+    //       .status(400)
+    //       .send({ status: false, msg: `please provide ${field}` });
+    //   }
+    // }
     // Checking if the value is a valid string or not
     for (field of requiredFields)
       if (!isValidString(data[field])) {
@@ -54,13 +55,13 @@ const createIntern = async function (req, res) {
         .send({ status: false, msg: "name should only contain letters" });
     }
     //Checking if there is no field other than the specified
-    for (key in data) {
-      if (!requiredFields.includes(key))
-        return res.status(400).send({
-          status: false,
-          msg: `keys must be among this ${requiredFields.join(",")}`,
-        });
-    }
+    // for (key in data) {
+    //   if (!requiredFields.includes(key))
+    //     return res.status(400).send({
+    //       status: false,
+    //       msg: `keys must be among this ${requiredFields.join(",")}`,
+    //     });
+    // }
     // Checking if the Email is a valid or not
     if (!isValidEmail(data.email.trim())) {
       return res.status(400).send({ status: false, msg: "email is invalid" });
